@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\BSK\PycharmProjects\SpaceX\venv"
+VIRTUAL_ENV="C:\Users\BSK\PycharmProjects\SPACE_X\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

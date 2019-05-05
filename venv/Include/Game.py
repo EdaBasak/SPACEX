@@ -7,22 +7,28 @@ import random
 from Chapter import ChapterOne
 from Menu import Menu
 from TargetOne import TargetOne
+from TargetTwo import TargetTwo
+from TargetTree import TargetTree
+from Plane import *
+from ScoreBoard import *
 pygame.init()
+
 gameDisplay_width=800
 gameDisplay_height=600
 gameDisplay = pygame.display.set_mode((gameDisplay_width,gameDisplay_height))
-pygame.display.set_caption('Space X')
+pygame.display.set_caption('SPACE X')
 
 crashed = False
+
 clock = pygame.time.Clock()
 chapter= ChapterOne(gameDisplay)
 chapter.start(gameDisplay)
 endEvent=pygame.event.Event(pygame.USEREVENT, attr1='endEvent')
 
 menu=Menu(gameDisplay.get_rect())
-
-
 end=False
+ScoreBoard.init_ScoreBoard()
+ScoreBoard.set_Score()
 while not crashed:
 
     for event in pygame.event.get():
@@ -35,36 +41,29 @@ while not crashed:
                 crashed=menu.runMenu(gameDisplay)
                 chapter.pgenerateTargetTimer.pause(False)
 
-            if event.key == pygame.K_UP:
-                chapter.spaceShip.my=-1
-            if event.key == pygame.K_DOWN:
-                chapter.spaceShip.my=1
-            if event.key == pygame.K_LEFT:
-                chapter.spaceShip.mx=-1
-            if event.key == pygame.K_RIGHT:
-                chapter.spaceShip.mx=1
-            if event.key == pygame.K_SPACE:
-                chapter.spaceShip.fire(gameDisplay)
-        elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_UP:
-                chapter.spaceShip.my=0
-            if event.key == pygame.K_DOWN:
-                chapter.spaceShip.my=0
-            if event.key == pygame.K_LEFT:
-                chapter.spaceShip.mx=0
-            if event.key == pygame.K_RIGHT:
-                chapter.spaceShip.mx=0
+
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            chapter.plane.fire(gameDisplay,pygame.mouse.get_pos())
         #event karşılaştırmalarında eşitlik koşulu çalışır
         #eventlar aynı olmalı özellikleriyle birlikte
         elif event== chapter.finishEvent:
             print(event)
+
             end=True
 
-        elif event== chapter.spaceShip.exposedEvent:
+        elif event== chapter.plane.exposedEvent:
             print(event)
+        elif event == TargetOne.ExposedEvent:
+            ScoreBoard.set_Score(1)
+        elif event == TargetTwo.ExposedEvent:
+            ScoreBoard.set_Score(5)
+        elif event == TargetTree.ExposedEvent:
+            ScoreBoard.set_Score(10)
 
     if not end:
-        chapter.draw(gameDisplay)
+        mouse_position = pygame.mouse.get_pos()
+        chapter.draw(gameDisplay,mouse_position)
+        ScoreBoard.draw(gameDisplay)
 
 
     pygame.display.update()
@@ -72,5 +71,4 @@ while not crashed:
 
 pygame.quit()
 quit()
-
 

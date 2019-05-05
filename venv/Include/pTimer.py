@@ -35,3 +35,5 @@ class pTimer():
             while self.isPause:
                 time.sleep(0.10)
                 continue
+
+
